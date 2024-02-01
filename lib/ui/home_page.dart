@@ -1,6 +1,7 @@
+import 'package:aplikasi_penjualan/ui/my_order.dart';
 import 'package:flutter/material.dart';
 import 'package:aplikasi_penjualan/models/get_barang_model.dart';
-import 'package:aplikasi_penjualan/response/getbarang_response.dart';
+import 'package:aplikasi_penjualan/response/get_barang_response.dart';
 import 'package:aplikasi_penjualan/ui/form_transaksi.dart';
 import '../service/api_service.dart';
 
@@ -26,7 +27,21 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('List of post'),
+        title: Text('Toko Online'),
+        actions: [
+          InkWell(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => MyOrderScreen(),
+                ),
+              );
+            },
+            child: Padding(
+                padding: const EdgeInsets.only(right: 20),
+                child: Text('Pesanan Ku')),
+          )
+        ],
       ),
       body: Column(
         children: [

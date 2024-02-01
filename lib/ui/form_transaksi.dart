@@ -1,5 +1,7 @@
 import 'dart:ffi';
-
+import 'package:aplikasi_penjualan/models/post_transaksi_model.dart';
+import 'package:aplikasi_penjualan/service/api_service.dart';
+import 'package:aplikasi_penjualan/ui/home_page.dart';
 import 'package:flutter/material.dart';
 
 class FormTransaksiScreen extends StatefulWidget {
@@ -11,21 +13,47 @@ class FormTransaksiScreen extends StatefulWidget {
 }
 
 class _FormTransaksiScreenState extends State<FormTransaksiScreen> {
+  final apiService = ApiService();
   final TextEditingController _namaPelanggan = TextEditingController();
   final TextEditingController _alamat = TextEditingController();
   final TextEditingController _noHp = TextEditingController();
 
-  var jumlah = 0;
+  var jumlah = 1;
   var total = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    total = int.parse(widget.data.harga);
+  }
+
+  String formatRupiah(int value) {
+    String result = value.toString();
+    String temp = '';
+    int count = 0;
+    for (int i = result.length - 1; i >= 0; i--) {
+      temp += result[i];
+      count++;
+      if (count == 3 && i != 0) {
+        temp += '.';
+        count = 0;
+      }
+    }
+    String formatted = '';
+    for (int i = temp.length - 1; i >= 0; i--) {
+      formatted += temp[i];
+    }
+    return 'Rp $formatted';
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+        child: ListView(
+          // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding: const EdgeInsets.only(bottom: 10),
@@ -113,7 +141,7 @@ class _FormTransaksiScreenState extends State<FormTransaksiScreen> {
                     style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
                   ),
                   Text(
-                    "${widget.data.harga}",
+                    "${formatRupiah(int.parse(widget.data.harga))}",
                     style:
                         TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
                   ),
@@ -143,9 +171,10 @@ class _FormTransaksiScreenState extends State<FormTransaksiScreen> {
                     width: 50,
                     child: ElevatedButton(
                       onPressed: () {
-                        if (jumlah > 0) {
+                        if (jumlah > 1) {
                           setState(() {
                             jumlah -= 1;
+                            total = int.parse(widget.data.harga) * jumlah;
                           });
                         }
                       },
@@ -163,6 +192,7 @@ class _FormTransaksiScreenState extends State<FormTransaksiScreen> {
                       onPressed: () {
                         setState(() {
                           jumlah += 1;
+                          total = int.parse(widget.data.harga) * jumlah;
                         });
                       },
                       child: Text(
@@ -175,7 +205,7 @@ class _FormTransaksiScreenState extends State<FormTransaksiScreen> {
                 ],
               ),
             ),
-            Spacer(),
+            // Spacer(),
             Divider(color: Colors.black),
             Padding(
               padding: const EdgeInsets.only(bottom: 10, top: 10),
@@ -191,7 +221,7 @@ class _FormTransaksiScreenState extends State<FormTransaksiScreen> {
                   ),
                   Expanded(
                     child: Text(
-                      "${int.parse(widget.data.harga) * jumlah}",
+                      "${formatRupiah(total)}",
                       textAlign: TextAlign.end,
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
@@ -207,7 +237,32 @@ class _FormTransaksiScreenState extends State<FormTransaksiScreen> {
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        if (_namaPelanggan.text == "" ||
+                            _alamat.text == "" ||
+                            _noHp.text == "") {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text('Lengakapi Data Anda Dahulu!')));
+                          return;
+                        }
+                        var res = await apiService.sendOrder(
+                          int.parse(widget.data.id),
+                          _namaPelanggan.text.toString(),
+                          _alamat.text.toString(),
+                          _noHp.text.toString(),
+                          total,
+                          jumlah,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text('Data Pesanan berhasil Order')));
+
+                        // Setelah berhasil melakukan post data arahkan halaman ke halaman HomePage
+                        // dengan isi data yang baru
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => Homepage()),
+                            (route) => false);
+                      },
                       child: Text(
                         "Beli",
                         style: TextStyle(
