@@ -1,5 +1,5 @@
-import 'package:aplikasi_penjualan/models/post_model.dart';
-import 'package:aplikasi_penjualan/response/post_response.dart';
+import 'package:aplikasi_penjualan/models/getbarang_model.dart';
+import 'package:aplikasi_penjualan/response/getbarang_response.dart';
 import 'package:aplikasi_penjualan/ui/form_transaksi.dart';
 import 'package:flutter/material.dart';
 
@@ -33,16 +33,16 @@ class Homepage extends StatelessWidget {
               );
             } else if (snapshot.hasData) {
               //simpan dlu data ke dalam model post response
-              PostResponse postResponse = snapshot.data;
+              GetBarangResponse getbarangresponse = snapshot.data;
               //lalu buat dalam bentuk list yang isinya postrespone.listpost
-              List<PostModel> listPost = postResponse.listPost;
+              List<GetBarangModel> listBarang = getbarangresponse.listPost;
               //lalu tampilkan datanya
               return ListView.builder(
                   //item count menunjukkan berapa banyak sih data
                   //item builder menampilkan datanya
-                  itemCount: listPost.length,
+                  itemCount: listBarang.length,
                   itemBuilder: (context, index) {
-                    PostModel postModel = listPost[index];
+                    GetBarangModel postModel = listBarang[index];
                     return Card(
                       color: Colors.blueGrey,
                       child: Padding(
@@ -76,7 +76,8 @@ class Homepage extends StatelessWidget {
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                FormTransaksiScreen(data:postModel)));
+                                                FormTransaksiScreen(
+                                                    data: postModel)));
                                   },
                                   child: Text("Beli")),
                             )
