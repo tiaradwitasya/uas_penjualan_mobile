@@ -1,4 +1,4 @@
-import '../models/getbarang_model.dart';
+import '../models/get_barang_model.dart';
 
 class GetBarangResponse {
   List<GetBarangModel> listPost = [];
