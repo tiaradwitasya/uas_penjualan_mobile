@@ -75,4 +75,31 @@ class ApiService {
       return null;
     }
   }
+
+  Future<MyOrderResponse?> updateTransaksi(
+      String idtransaksi,
+      String id_barang,
+      String nama,
+      String alamat,
+      String nohp,
+      String total_harga,
+      String jumlah_barang) async {
+    try {
+      final response = await Dio().put(
+        'http://10.0.2.2/crud_penjualan/index.php?tipe=updaterransaksi&idtransaksi=${idtransaksi}',
+        data: {
+          'id_barang': id_barang,
+          'nama_pelanggan': nama,
+          'alamat': alamat,
+          'no_hp': nohp,
+          'total_harga': total_harga,
+          'jumlah_barang': jumlah_barang,
+        },
+      );
+
+      return response.data;
+    } catch (error) {
+      return null;
+    }
+  }
 }

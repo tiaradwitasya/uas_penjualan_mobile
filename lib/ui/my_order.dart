@@ -2,6 +2,7 @@ import 'package:aplikasi_penjualan/models/myorder_model.dart';
 import 'package:aplikasi_penjualan/response/myorder_response.dart';
 import 'package:aplikasi_penjualan/service/api_service.dart';
 import 'package:aplikasi_penjualan/ui/home_page.dart';
+import 'package:aplikasi_penjualan/ui/update_transaksi.dart';
 import 'package:flutter/material.dart';
 
 class MyOrderScreen extends StatefulWidget {
@@ -78,14 +79,21 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                                           fontSize: 20),
                                     ),
                                     Text(
-                                      postModel.nama_barang.toString(),
+                                      '${postModel.nama_barang.toString()}',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
                                           fontSize: 18),
                                     ),
                                     Text(
-                                      "${formatRupiah(int.parse(postModel.total_harga!))}",
+                                      '${postModel.jumlah_barang} Item',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          fontSize: 18),
+                                    ),
+                                    Text(
+                                      "Total: ${formatRupiah(int.parse(postModel.total_harga!))}",
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.red,
@@ -94,28 +102,49 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                                   ],
                                 ),
                               ),
-                              Container(
-                                child: ElevatedButton(
-                                  onPressed: () async {
-                                    var res = apiService.DeleteTransaksi(
-                                        postModel.id!);
-
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                            content: Text(
-                                                'Data Transaksi berhasil Hapus')));
-
-                                    Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => Homepage()),
-                                        (route) => false);
-                                  },
-                                  child: Icon(
-                                    Icons.delete,
-                                    color: Colors.red,
+                              Column(
+                                children: [
+                                  Container(
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                          builder: (context) =>
+                                              UpdateTransaksiScreen(
+                                                  data: postModel),
+                                        ));
+                                      },
+                                      child: Icon(
+                                        Icons.edit,
+                                        color: Colors.amber,
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                  Container(
+                                    child: ElevatedButton(
+                                      onPressed: () async {
+                                        var res = apiService.DeleteTransaksi(
+                                            postModel.id!);
+
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                content: Text(
+                                                    'Data Transaksi berhasil Hapus')));
+
+                                        Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Homepage()),
+                                            (route) => false);
+                                      },
+                                      child: Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                  )
+                                ],
                               )
                             ],
                           ),

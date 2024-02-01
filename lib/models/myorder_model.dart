@@ -5,6 +5,7 @@ class getMyOrderModel {
   String? alamat;
   String? no_hp;
   String? total_harga;
+  String? harga_barang;
   String? nama_barang;
   String? jumlah_barang;
   String? kategori;
@@ -18,6 +19,7 @@ class getMyOrderModel {
     required this.alamat,
     required this.no_hp,
     required this.total_harga,
+    required this.harga_barang,
     required this.nama_barang,
     required this.jumlah_barang,
     required this.kategori,
@@ -29,9 +31,10 @@ class getMyOrderModel {
     id = json['id'];
     id_barang = json['id_barang'];
     nama_pelanggan = json['nama_pelanggan'];
-    alamat = json['ialamat'];
-    no_hp = json['no_ho'];
+    alamat = json['alamat'];
+    no_hp = json['no_hp'];
     total_harga = json['total_harga'];
+    harga_barang = json['harga'];
     nama_barang = json['nama'];
     jumlah_barang = json['jumlah_barang'];
     kategori = json['kategori'];
