@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
+import 'dart:ffi';
 
+import 'package:flutter/material.dart';
 
 class FormTransaksiScreen extends StatefulWidget {
   final data;
-  const FormTransaksiScreen({super.key,this.data});
+  const FormTransaksiScreen({super.key, this.data});
 
   @override
   State<FormTransaksiScreen> createState() => _FormTransaksiScreenState();
@@ -15,15 +16,16 @@ class _FormTransaksiScreenState extends State<FormTransaksiScreen> {
   final TextEditingController _noHp = TextEditingController();
 
   var jumlah = 0;
+  var total = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: SingleChildScrollView(
-          child: Padding(
+      body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding: const EdgeInsets.only(bottom: 10),
@@ -82,7 +84,6 @@ class _FormTransaksiScreenState extends State<FormTransaksiScreen> {
                 ],
               ),
             ),
-            
             Padding(
               padding: const EdgeInsets.only(bottom: 10),
               child: Column(
@@ -95,7 +96,8 @@ class _FormTransaksiScreenState extends State<FormTransaksiScreen> {
                   ),
                   Text(
                     "${widget.data.nama}",
-                    style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
+                    style:
+                        TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
                   ),
                 ],
               ),
@@ -112,7 +114,8 @@ class _FormTransaksiScreenState extends State<FormTransaksiScreen> {
                   ),
                   Text(
                     "${widget.data.harga}",
-                    style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
+                    style:
+                        TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
                   ),
                 ],
               ),
@@ -127,7 +130,6 @@ class _FormTransaksiScreenState extends State<FormTransaksiScreen> {
                     "Jumlah Barang",
                     style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
                   ),
-                  
                 ],
               ),
             ),
@@ -141,13 +143,16 @@ class _FormTransaksiScreenState extends State<FormTransaksiScreen> {
                     width: 50,
                     child: ElevatedButton(
                       onPressed: () {
-                        setState(() {
-                          jumlah -=1;
-                        });
+                        if (jumlah > 0) {
+                          setState(() {
+                            jumlah -= 1;
+                          });
+                        }
                       },
                       child: Text(
                         "-",
-                        style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 25),
                       ),
                     ),
                   ),
@@ -157,13 +162,39 @@ class _FormTransaksiScreenState extends State<FormTransaksiScreen> {
                     child: ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          jumlah +=1;
+                          jumlah += 1;
                         });
                       },
                       child: Text(
                         "+",
-                        style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 25),
                       ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Spacer(),
+            Divider(color: Colors.black),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10, top: 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text(
+                      "Total",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      "${int.parse(widget.data.harga) * jumlah}",
+                      textAlign: TextAlign.end,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                     ),
                   ),
                 ],
@@ -176,12 +207,11 @@ class _FormTransaksiScreenState extends State<FormTransaksiScreen> {
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {
-                        
-                      },
+                      onPressed: () {},
                       child: Text(
                         "Beli",
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
                       ),
                     ),
                   ),
@@ -190,7 +220,7 @@ class _FormTransaksiScreenState extends State<FormTransaksiScreen> {
             ),
           ],
         ),
-      )),
+      ),
     );
   }
 }
